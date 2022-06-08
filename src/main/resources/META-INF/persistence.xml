@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 16. Ур.2- в файле все будет заключаться в главные тэг persistence -->
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             version="3.0"
+             xsi:schemalocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"> <!--1. Ур.2 программа просто не понимает такого синтексиса, а так все верно -->
+    <!--26. Ур.2 - ИДЕЯ воспринимает по синтаксису java, по факту не ошибка. Так что если встретим старый синтаксис ссылки будут другие-->
+
+    <!-- 17. Ур.2 - потом может быть несколько persistence-unit, а значит может быть подключение к разным БД, у каждого persistence-unit доблжно быть имя которое мы придумываем сами name="ormLesson" (уникальный  идентификатор)-->
+    <persistence-unit name="ormLesson" transaction-type="RESOURCE_LOCAL">
+
+        <!-- 30. Ур.2 - внутри тега - persistence-unit, добавляем тэг <class> и прописываем путь к классу сущности (Author). Вообщем сколько таблиц столько и классов. 2й шаг п.31 -->
+        <class> ru.ifmo.lessons.jpa.entity.Author </class>
+        <!-- 5. Ур.3 - Т.к создали новый класс Article, здесь добавляем тэг  -->
+        <class> ru.ifmo.lessons.jpa.entity.Article</class>
+        <class>ru.ifmo.lessons.jpa.entity.Nomination</class>
+
+        <properties>
+            <!-- 18. Ур.2 - Стандартные настройки для JDBC вызгядят следующим образом, одна настройка один тэг property имеет name (название настройки) и value (значение), в стандартные настройки входят п. 19-22 -->
+            <!--22. Ур.2 - строчка подключения -->
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/lessons"/>
+            <!--20. Ур.2 -логин пользователя бд-->
+            <property name="jakarta.persistence.jdbc.user" value="postgres"/>
+            <!-- 21. Ур.2 - пароль пользователя бд-->
+            <property name="jakarta.persistence.jdbc.password" value="Kemira2023"/>
+            <!--19. Ур.2 -используемый драйвер-->
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+
+            <property name="eclipselink.logging.level" value="FINE"/> <!-- 23. Ур.2 - Эта строчка говорит о том, что наш(eclipselink.) ORM будет логировать (.logging.) и могут быть разные уровни логирования ("FINE"), может быть только error, может быть worning, или вариант "FINE" который будет писать про все. Логировать будет в консоль -->
+            <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/> <!-- 24. Ур.2 -Это свойство говорит о том, что при каждом запуске приложения, таблицы будут удаляться и создаваться заново (drope-and-create,) но есть и другие варианты (create - таблички которые еще не созданы, drop- вроде удаляются но потом создаются новые (Даше не помнит), none - ничего не будет происходить) -->
+
+            <!-- 25. Ур.2 - настройки пула, по умолчанию использует свой пул соединений, вместо пула по умолчанию может быть использован C3P0 и HikariCP -->
+            <property name="eclipselink.connection-pool.default.initial" value="5"/>
+            <property name="eclipselink.connection-pool.default.min" value="3"/>
+            <property name="eclipselink.connection-pool.default.max" value="10"/>
+
+            <!-- отключение кэша-->
+            <property name="eclipselink.cache.shared.default" value="false"/>
+
+        </properties>
+    </persistence-unit>
+</persistence>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ru.ifmo</groupId>
+    <artifactId>dblessons</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+    <properties>
+        <maven.compiler.source>18</maven.compiler.source>
+        <maven.compiler.target>18</maven.compiler.target>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.postgresql</groupId> <!-- 1. Ур.1 скопировали с https://mvnrepository.com/artifact/org.postgresql/postgresql/42.3.4 что бы подключить библиотеку    -->
+            <artifactId>postgresql</artifactId>
+            <version>42.3.4</version><!-- 2. Ур.1 библиотека будет доступна на момент выполнения программы     -->
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- пул соединений с сервером БД -->
+        <dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.5.5</version>
+        </dependency>
+
+        <!--        https://jakarta.ee/specifications/persistence/3.0/jakarta-persistence-spec-3.0.html-->
+        <!-- 10. Ур.2 - ORM библиотека, позволяет взаимодействовать с реляционными БД. -->
+        <!-- 11. Ур.2 - абстракции для ORM (Object-relational Mapping) эта библиотека, сущности хранимые в БД, библиотека представляет как програмые объекты, пример - мы в программе работаем только с классами и объектами, библиотека на основе классов будет создавать таблицы и инфо об обектах будет записывать вот в таком виде, один объект (об.) одна строчка в таблице --> <!--Библиотека способна (то есть у нее есть методы) создавать таблицы со всеми необходимыми связями на основе классов, способна добавлять, обновлять, удалять записи по первичному ключу, причем SQL запросы она генерируем сама, сложные запросы необходимо писать вручную. Все ORM библиотеки внутри будут использовать JDBS (и те конкретные реализации которые будут установлены, то есть наша ORM библиотека не будут работать без связи с библиотекой postgresql и прописанными ее зависимостями (<groupId>org.postgresql</groupId> <artifactId>postgresql</artifactId> <version>42.3.4</version>))-->
+        <!-- 13. Ур.2 - п.12 это набор абстракций для ORM библиотеки, то есть PRM библиотека должна реализовывать методы которые написаны вот в этих (п.12) библиотеках-->
+        <!--12. Ур.2 - сначала была до 8й версии IDEA, java.persistence-api (1 и 2 версия) затем jakarta.persistence-api отличие то что последняя может работать с DateDayTime. Данные библиотеки, по сути, набор абстракций (абстрактных методов) и имеют кучу интерфейсов и когда разработчики занимаются созданием ORM библиотеки они должны взять или jakarta или java и писать реализации (как будет происходить соединение с БД, как будут формироваться SQL запросы, как будут получаться данные, как будут собираться объекты итд) для этих абстракций -->
+        <!-- 14. Ур.2- тоесть нельзя сказать что пять строк ниже этот ORM библиотеки, нет это набор абстракций для ORM биб. и большинство ORM библиотек реализуют эти абстракции -->
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
+        <!-- 15. Ур.2- две наиболее популярные реализации JPA (набор абстракций)
+        1) а это реализация 1. ORM eclipselink
+        2) а это реализация 2. ORM hibernate, помимо реализаций которые есть в JPA, есть собственный механизм взаимодействия с БД
+        Тогда если ORM реализует JPA то его НАСТРОЙКИ, будут храниться в persistence.xml файле -->
+
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>eclipselink</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.jpa.modelgen.processor</artifactId>
+            <version>3.0.2</version>
+            <scope>runtime</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.projectlombok</groupId> <!--3. Ур.2 - библиотека ответственна за генерацию гетторов, сетторов, toString, equals, hashCod и конструкторов-->
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>  <!-- 2. Ур.2 - не должна попасть в итоговую сборку, нужна только на моменте компиляции-->
+        </dependency>
+
+    </dependencies>
+
+</project>
+
